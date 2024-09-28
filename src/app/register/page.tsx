@@ -1,5 +1,7 @@
 "use client"
 
+import { createUser } from '@/_actions/service';
+import { message } from 'antd';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
@@ -12,7 +14,7 @@ const RegisterForm = () => {
 
   const router = useRouter()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -21,7 +23,21 @@ const RegisterForm = () => {
     }
 
     console.log('Register with:', { mobile, password, name, userType });
-    // Call register API here
+    
+    try {
+        await createUser({ mobile, password, name, user_type: userType })
+        message.success("User created")
+        router.push("/login")
+    } catch (error:any){
+        const errMsg = error?.stack.toString();
+        if (errMsg.includes("duplicate")) {
+          message.error("User already exist with this mobile. try login");
+        } else {
+          message.error(errMsg);
+        }
+    }
+    
+
   };
 
   return (

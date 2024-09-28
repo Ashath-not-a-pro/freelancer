@@ -133,3 +133,4 @@ export async function deletePost(id: any) {
     throw error;
   }
 }
+

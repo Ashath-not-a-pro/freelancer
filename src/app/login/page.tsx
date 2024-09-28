@@ -1,5 +1,7 @@
 "use client"
 
+import { auth } from '@/_actions/service';
+import { message } from 'antd';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
@@ -9,10 +11,20 @@ const LoginForm = () => {
 
   const router = useRouter()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
     console.log('Login with:', { mobile, password });
-    // Call login API here
+    try{
+        const response = await auth(mobile, password);
+        if (response?.success) {
+          localStorage.setItem("isValidUser","true")
+          localStorage.setItem("userId",response.id)
+          message.success("Login successfull")
+          router.push('/')
+        }
+      } catch(error:any){
+        message.error(error.toString())
+      }
   };
 
   return (
