@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
+"use client";
 
 import Box from "@mui/material/Box";
 import { InputController } from "./inputController";
@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Button, Upload, message, Image } from "antd";
 import { UploadFile } from "antd/es/upload/interface";
-import { addPost } from "@/_actions/service";
+import { addPost, updatePost } from "@/_actions/service";
 import { useRouter } from "next/navigation";
 
 const AddPostForm = (props: any) => {
@@ -39,12 +39,12 @@ const AddPostForm = (props: any) => {
 
   useEffect(() => {
     if (formData?._id) {
-      const imgList: any = formData?.img
-        ? [{ uid: "-1", name: "Image", status: "done", url: formData?.img }]
+      const imgList: any = formData?.image
+        ? [{ uid: "-1", name: "Image", status: "done", url: formData?.image }]
         : [];
       setState({ ...state, fileList: imgList });
-      setValue("img", formData?.img);
-      setValue("title", formData?.title);
+      setValue("img", formData?.image);
+      setValue("topic", formData?.topic);
       setValue("description", formData?.description);
     }
   }, []);
@@ -87,26 +87,44 @@ const AddPostForm = (props: any) => {
     setValue("img", "");
   };
 
-  const updateData = async (form: any) => {
-    const base64Img = await convertFileToBase64(
-      state?.fileList[0]?.originFileObj as File
-    );
-    form.img = base64Img;
+  const create = async (form: any) => {
     try {
-      console.log({ form });
       const createSkillResponse = await addPost({
         topic: form.topic,
         description: form.description,
         image: form.img,
       });
       if (createSkillResponse._id) {
-        handleClose(true);
+        handleClose();
         message.success("Post created");
         router.back();
       }
     } catch {
       message.success("Post created");
       router.back();
+    }
+  };
+
+  const update = async (form: any) => {
+    try {
+      await updatePost(formData._id, form);
+      message.success("Updated")
+      handleClose();
+    } catch (err: any) {
+      message.error(err);
+    }
+  };
+
+  const updateData = async (form: any) => {
+    const base64Img = form?.img ? form?.img : await convertFileToBase64(
+      state?.fileList[0]?.originFileObj as File
+    )
+    form.img = base64Img;
+
+    if (isEdit) {
+      await update(form);
+    } else {
+      await create(form);
     }
   };
 

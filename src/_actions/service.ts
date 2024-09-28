@@ -96,13 +96,40 @@ export async function addPost(postData:{topic:string, description: string, image
   try {
     await connectDB();
 
-    console.log(postData)
-
     const newUser = new PostModal(postData);
     await newUser.save();
 
     return newUser;
   } catch (error: any) {
     throw new Error(`${error.message}`);
+  }
+}
+
+export async function updatePost(id: string, postData: { img: string; topic: string; description: string }) {
+  try {
+    await connectDB();
+
+    const filter = { _id: id };
+    const update = { $set: { image: postData?.img, topic: postData?.topic, description: postData?.description } };
+
+    const updateUser = await PostModal.updateOne(filter, update);
+
+    return updateUser;
+  } catch (error: any) {
+    throw new Error(`${error.message}`);
+  }
+}
+
+export async function deletePost(id: any) {
+  await connectDB();
+
+  const filter = { _id: id };
+
+  try {
+    const result = await PostModal.deleteOne(filter);
+    return result;
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    throw error;
   }
 }

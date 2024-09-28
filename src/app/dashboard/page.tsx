@@ -1,13 +1,13 @@
 "use client"
 
 import { NavBar } from '@/component/navBar'
+import { PostTable } from '@/component/postTable';
 import { StyledTab, StyledTabs } from '@/component/styledTab';
-import { Home, HomeIcon } from 'lucide-react';
+import { HomeIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
 const Dashboard = () => {
-  const [state, setState]: any = useState({});
   const router = useRouter()
 
   const [tab, setTab] = useState(0);
@@ -20,7 +20,7 @@ const Dashboard = () => {
     {
       label: "Your Posts",
       show: true,
-      component: <div>post</div>,
+      component: <PostTable />,
     },
     { label: "Details", show: true, component: <div>Details</div> },
     { label: "Love", show: true, component: <div>love</div> },
@@ -31,7 +31,6 @@ const Dashboard = () => {
   return (
     <div className='min-h-screen w-full'>
       <NavBar title={"Profile"} icons={icons}/>
-      <div className="text-secondary text-lg m-2">Welcome {state.name}, {"good morning"} !!</div>
          <div className='border m-2 rounded-md bg-slate-100'>
            <StyledTabs
              value={tab}
