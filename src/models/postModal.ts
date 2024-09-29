@@ -11,8 +11,10 @@ const userSchema = new Schema({
   },
   image: {
     type: String
+  },
+  user: {
+    type: String
   }
-
 }, { timestamps: true})
 
 const PostModal = models.post || model('post', userSchema)

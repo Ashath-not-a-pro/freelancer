@@ -17,6 +17,24 @@ const userSchema = new Schema({
   user_type: {
     type: String,
     Required: true
+  },
+  address: {
+    type: String
+  },
+  skills: {
+    type: Array<String>
+  },
+  photo: {
+    type: String
+  },
+  email: {
+    type: String
+  },
+  company_name: {
+    type: String
+  },
+  company_description: {
+    type: String
   }
 
 }, { timestamps: true})

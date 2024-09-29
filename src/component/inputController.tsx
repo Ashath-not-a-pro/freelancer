@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-function-type */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import TextField from "@mui/material/TextField";
 import React, { FC } from "react";
 import { Controller } from "react-hook-form";

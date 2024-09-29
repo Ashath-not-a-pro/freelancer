@@ -6,9 +6,9 @@ export const NavBar = (props: any) => {
     <div className="h-16 bg-secondary flex items-center justify-between">
       <div className="ml-2 text-xl font-semibold">{title}</div>
       <div className="m-2 flex space-x-3">
-          {
-            icons.map((item:any) => item)
-          }
+        {icons.map((item: any, i: number) => (
+          <div key={i}>{item}</div>
+        ))}
       </div>
     </div>
   );

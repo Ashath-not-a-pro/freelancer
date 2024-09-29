@@ -3,13 +3,15 @@ import { getUsers } from "@/_actions/service";
 import MainContainer from "@/component/mainContainer";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import UserContext from "./context";
+import withAuth from "@/lib/auth";
 
-export default function Home() {
+function Home() {
   const [state, setState]: any = useState({});
   const router = useRouter();
+
   const userId = localStorage.getItem("userId");
   const isValidUser = localStorage.getItem("isValidUser");
-  const lastLoginAt = localStorage.getItem("loginAt");
 
   useEffect(() => {
     async function revalidate() {
@@ -23,5 +25,15 @@ export default function Home() {
     revalidate();
   }, []);
 
-  return <>{isValidUser ? <MainContainer /> : <></>}</>;
+  document.title = "Freelancer";
+
+  return (
+    <div>
+      <UserContext.Provider value={state}>
+        <MainContainer />
+      </UserContext.Provider>
+    </div>
+  );
 }
+
+export default withAuth(Home);

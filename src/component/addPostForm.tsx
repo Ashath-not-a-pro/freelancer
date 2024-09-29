@@ -4,11 +4,12 @@
 import Box from "@mui/material/Box";
 import { InputController } from "./inputController";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Upload, message, Image } from "antd";
 import { UploadFile } from "antd/es/upload/interface";
 import { addPost, updatePost } from "@/_actions/service";
 import { useRouter } from "next/navigation";
+import UserContext from "@/context/userContext";
 
 const AddPostForm = (props: any) => {
   const { formData, handleClose } = props;
@@ -28,7 +29,8 @@ const AddPostForm = (props: any) => {
   };
 
   const isEdit = !!formData?._id;
-  console.log(isEdit);
+  const context = useContext(UserContext)
+  const user = context?.user
 
   const [state, setState] = useState(initialState);
 
@@ -93,6 +95,7 @@ const AddPostForm = (props: any) => {
         topic: form.topic,
         description: form.description,
         image: form.img,
+        user: user?.mobile
       });
       if (createSkillResponse._id) {
         handleClose();

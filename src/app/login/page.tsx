@@ -19,6 +19,7 @@ const LoginForm = () => {
         if (response?.success) {
           localStorage.setItem("isValidUser","true")
           localStorage.setItem("userId",response.id)
+          localStorage.setItem("userData",response.userData)
           message.success("Login successfull")
           router.push('/')
         }

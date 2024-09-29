@@ -1,11 +1,13 @@
 "use client"
 
+import DetailContainer from '@/component/detailContainer';
 import { NavBar } from '@/component/navBar'
 import { PostTable } from '@/component/postTable';
 import { StyledTab, StyledTabs } from '@/component/styledTab';
-import { HomeIcon } from 'lucide-react';
+import UserContext from '@/context/userContext';
+import { HomeIcon, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 const Dashboard = () => {
   const router = useRouter()
@@ -16,17 +18,24 @@ const Dashboard = () => {
     setTab(newValue);
   };
 
+  const context = useContext(UserContext)
+  const userData = context?.user
+
+  const logout = ()=> {
+    localStorage.clear()
+    router.push("/login")
+  }
+
   const tabs = [
     {
       label: "Your Posts",
       show: true,
-      component: <PostTable />,
+      component: <PostTable user={userData} />,
     },
-    { label: "Details", show: true, component: <div>Details</div> },
-    { label: "Love", show: true, component: <div>love</div> },
+    { label: "Details", show: true, component: <DetailContainer user={userData}/> },
   ];
 
-  const icons = [<HomeIcon onClick={()=> router.push("/")}/>]
+  const icons = [<HomeIcon onClick={()=> router.push("/")}/>, <LogOut onClick={()=> logout()}/>]
   
   return (
     <div className='min-h-screen w-full'>

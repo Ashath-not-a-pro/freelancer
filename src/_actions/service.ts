@@ -13,7 +13,7 @@ export async function getUsers(userData: any = {}) {
 
     return data;
   } catch (error: any) {
-    console.log(error)
+    console.log(error);
     return { err: error?.message };
   }
 }
@@ -34,7 +34,7 @@ export async function createUser(userData: {
   name: string;
   password: string;
   mobile: string;
-  user_type: string
+  user_type: string;
 }) {
   try {
     await connectDB();
@@ -53,10 +53,10 @@ export async function auth(mobile: string, password: string) {
 
   const userData: any = await getUsers({ mobile });
   const userPass = password == userData[0]?.password;
-  const userId = userData[0]?._id
+  const userId = userData[0]?._id;
 
   if (userPass) {
-    return { success: true, id: userId};
+    return { success: true, id: userId, userData };
   } else {
     throw new Error("Un-authorized");
   }
@@ -72,11 +72,10 @@ export async function updateUser(id: any, userData: any) {
     const result = await UserModel.updateOne(filter, update);
     return result;
   } catch (error) {
-    console.error('Error updating user:', error);
+    console.error("Error updating user:", error);
     throw error;
   }
 }
-
 
 export async function deleteUser(id: any) {
   await connectDB();
@@ -87,15 +86,21 @@ export async function deleteUser(id: any) {
     const result = await UserModel.deleteOne(filter);
     return result;
   } catch (error) {
-    console.error('Error deleting user:', error);
+    console.error("Error deleting user:", error);
     throw error;
   }
 }
 
-export async function addPost(postData:{topic:string, description: string, image: string}) {
+export async function addPost(postData: {
+  topic: string;
+  description: string;
+  image: string;
+  user: string;
+}) {
   try {
     await connectDB();
 
+    console.log("insert",{postData})
     const newUser = new PostModal(postData);
     await newUser.save();
 
@@ -105,12 +110,21 @@ export async function addPost(postData:{topic:string, description: string, image
   }
 }
 
-export async function updatePost(id: string, postData: { img: string; topic: string; description: string }) {
+export async function updatePost(
+  id: string,
+  postData: { img: string; topic: string; description: string }
+) {
   try {
     await connectDB();
 
     const filter = { _id: id };
-    const update = { $set: { image: postData?.img, topic: postData?.topic, description: postData?.description } };
+    const update = {
+      $set: {
+        image: postData?.img,
+        topic: postData?.topic,
+        description: postData?.description,
+      },
+    };
 
     const updateUser = await PostModal.updateOne(filter, update);
 
@@ -129,8 +143,37 @@ export async function deletePost(id: any) {
     const result = await PostModal.deleteOne(filter);
     return result;
   } catch (error) {
-    console.error('Error deleting user:', error);
+    console.error("Error deleting user:", error);
     throw error;
   }
 }
 
+export async function getUserPost(user: String) {
+  await connectDB();
+
+
+  try {
+    const userPost: any = await PostModal.find({ user: user });
+    return userPost;
+  } catch (error) {
+    console.error("Error fetching post:", error);
+    throw error;
+  }
+}
+
+export async function updateUserData(id:string,userdata:any) {
+  await connectDB();
+
+  const filter = { _id: id };
+    const update = {
+      $set: userdata,
+    };
+
+  try {
+    const userPost: any = await UserModel.updateOne(filter,update);
+    return userPost;
+  } catch (error) {
+    console.error("Error fetching post:", error);
+    throw error;
+  }
+}

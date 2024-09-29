@@ -1,11 +1,12 @@
-import { deletePost, getPosts } from "@/_actions/service";
+import { deletePost, getUserPost } from "@/_actions/service";
 import { message, Modal, Table } from "antd";
 import { Edit, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useShowHideWithRecord } from "@/lib/util";
 import AddPostForm from "./addPostForm";
 
-export const PostTable = () => {
+export const PostTable = (props: any) => {
+  const { user } = props;
   const [posts, setPost] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refetch, setRefetch] = useState(false);
@@ -13,10 +14,11 @@ export const PostTable = () => {
   useEffect(() => {
     async function fetchPost() {
       setLoading(true);
-      const data: any = await getPosts();
+      const data: any = await getUserPost(user?.mobile);
       setLoading(false);
       setPost(data);
     }
+
     fetchPost();
   }, [refetch]);
 
@@ -35,15 +37,15 @@ export const PostTable = () => {
     setRefetch(!refetch);
   };
 
-  const handleDelete = async(record:any)=> {
+  const handleDelete = async (record: any) => {
     try {
-        await deletePost(record?._id)
-        message.success("deleted successfully")
-        setRefetch(!refetch);
+      await deletePost(record?._id);
+      message.success("deleted successfully");
+      setRefetch(!refetch);
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const columns: any = [
     {
@@ -77,7 +79,11 @@ export const PostTable = () => {
             size={18}
             onClick={() => handleClick(record)}
           />
-          <Trash2 className="text-red-500" size={18} onClick={()=> handleDelete(record)}/>
+          <Trash2
+            className="text-red-500"
+            size={18}
+            onClick={() => handleDelete(record)}
+          />
         </div>
       ),
     },
@@ -89,7 +95,7 @@ export const PostTable = () => {
         dataSource={posts}
         loading={loading}
         pagination={false}
-        rowKey={(record: any) => record?._id}
+        rowKey={(record: any) => record._id}
       />
       {object.model ? (
         <Modal open={object.model} footer={[]} onCancel={() => handleHide()}>
