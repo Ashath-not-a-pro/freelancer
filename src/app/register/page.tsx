@@ -26,7 +26,7 @@ const RegisterForm = () => {
     console.log('Register with:', { mobile, password, name, userType });
     
     try {
-        await createUser({ mobile, password, name, user_type: userType })
+        await createUser({ mobile, password, name, user_type: userType, email: mail })
         message.success("User created")
         router.push("/login")
     } catch (error:any){

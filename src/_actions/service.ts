@@ -35,6 +35,7 @@ export async function createUser(userData: {
   password: string;
   mobile: string;
   user_type: string;
+  email: string
 }) {
   try {
     await connectDB();
