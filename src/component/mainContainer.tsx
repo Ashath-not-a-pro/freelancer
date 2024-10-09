@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { NavBar } from "./navBar";
 import { getPosts } from "@/_actions/service";
@@ -36,6 +35,7 @@ const MainContainer = () => {
                   img={item.image}
                   description={item.description}
                   topic={item.topic}
+                  item={item}
                 />
               );
             })}

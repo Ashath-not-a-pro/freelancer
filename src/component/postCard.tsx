@@ -1,7 +1,11 @@
-export const PostCard = (props: { img: string; description: string; topic: string }) => {
-    const { img, description, topic } = props;
+import { useRouter } from "next/navigation";
+
+export const PostCard = (props: { img: string; description: string; topic: string; item:any }) => {
+    const { img, description, topic, item } = props;
+
+    const router = useRouter()
     return (
-      <div className="border rounded-lg bg-white shadow-md transition-shadow duration-300 h-full w-full">
+      <div className="border rounded-lg bg-white shadow-md transition-shadow duration-300 h-full w-full" onClick={()=> router.push(`contact/${item._id}`)}>
         <div className="h-72 overflow-auto" style={{ scrollbarWidth: "none" }}>
           <img
             src={img}

@@ -9,6 +9,7 @@ const RegisterForm = () => {
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [mail,setMail] = useState('')
   const [name, setName] = useState('');
   const [userType, setUserType] = useState('freelancer');
 
@@ -32,12 +33,10 @@ const RegisterForm = () => {
         const errMsg = error?.stack.toString();
         if (errMsg.includes("duplicate")) {
           message.error("User already exist with this mobile. try login");
-        } else {
-          message.error(errMsg);
         }
+        message.success("User created")
+        router.push("/login")
     }
-    
-
   };
 
   return (
@@ -79,6 +78,18 @@ const RegisterForm = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               placeholder="Confirm password"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-sky-600">Email:</label>
+            <input
+              type="email"
+              id="email"
+              className="w-full p-2 border border-sky-300 rounded mt-1 text-base"
+              value={mail}
+              onChange={(e) => setMail(e.target.value)}
+              required
+              placeholder="Email"
             />
           </div>
           <div className="mb-4">
